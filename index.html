@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>📦 Почтовый манифест — Pro</title>
+
+<!-- jsPDF + AutoTable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<!-- Шрифт -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  /* --------------------------------------
+     Тема: современная, контрастная, доступная
+     -------------------------------------- */
+  :root{
+    --bg: #0f1724;
+    --surface: #0b1220;
+    --card: #0f1724;
+    --muted: #94a3b8;
+    --text: #e6eef8;
+    --accent1: #7c3aed; /* фиолетовый (trendy) */
+    --accent2: #06b6d4; /* бирюзовый (accent) */
+    --success: #22c55e;
+    --danger: #ef4444;
+    --glass: rgba(255,255,255,0.03);
+    --radius: 12px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:
+    linear-gradient(180deg,#071029 0%, #081428 45%, #07182a 100%);color:var(--text);
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+
+  .wrap{max-width:1200px;margin:28px auto;padding:20px;border-radius:16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 6px 30px rgba(2,6,23,0.7);outline: 1px solid rgba(255,255,255,0.02);}
+
+  header{display:flex;gap:16px;align-items:center;justify-content:space-between}
+  h1{font-size:20px;margin:0;font-weight:800;letter-spacing:0.2px}
+  .subtitle{color:var(--muted);font-size:13px}
+
+  /* Top area */
+  .top{display:flex;gap:16px;margin-top:18px;flex-wrap:wrap}
+  .box{background:var(--glass);padding:16px;border-radius:var(--radius);flex:1;min-width:260px}
+  .box.small{flex:0 0 280px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input[type="text"], input[type="tel"], input[type="number"], select, textarea {
+    width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.02); color:var(--text); outline:none; font-size:14px;
+  }
+  input:focus, textarea:focus, select:focus { box-shadow:0 0 0 4px rgba(124,58,237,0.12); border-color:var(--accent1) }
+
+  /* Couriers */
+  .courier-list{display:flex;flex-direction:column;gap:8px}
+  .courier{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));cursor:pointer; border:1px solid rgba(255,255,255,0.03)}
+  .courier.active{box-shadow:0 6px 18px rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.35)}
+  .courier .dot{width:10px;height:10px;border-radius:50%;background:var(--accent2)}
+  .courier strong{display:block;font-weight:700}
+
+  /* Scanner zone */
+  .scanner textarea{min-height:90px;resize:vertical}
+  .actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;color:#071428}
+  .btn.primary{background:linear-gradient(90deg,var(--accent1),#5b21b6);color:var(--text)}
+  .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+  .btn.danger{background:var(--danger);color:white}
+
+  /* Table */
+  .table-wrap{margin-top:20px;overflow:auto;border-radius:12px}
+  table{width:100%;border-collapse:collapse;min-width:900px}
+  th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left;font-size:14px}
+  thead th{position:sticky;top:0;background:linear-gradient(90deg,var(--accent1),#5b21b6);color:white;font-weight:700}
+  tbody tr:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+  td[contenteditable="true"]{background:rgba(255,255,255,0.02);border-radius:6px}
+
+  .right{text-align:right}
+  .muted{color:var(--muted);font-size:13px}
+
+  /* Footer area for totals and signatures */
+  .footer-area{display:flex;gap:20px;align-items:flex-start;margin-top:18px;flex-wrap:wrap}
+  .totals{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;min-width:220px}
+  .signature-pad{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;flex:1}
+  canvas{background:white;border-radius:8px;width:100%;height:120px;display:block}
+
+  /* small screens */
+  @media (max-width:880px){
+    .top{flex-direction:column}
+    table{min-width:700px}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap" role="main" aria-labelledby="pageTitle">
+    <header>
+      <div>
+        <h1 id="pageTitle">📦 Почтовый манифест — Pro</h1>
+        <div class="subtitle">Сканируй треки, правь строки как в Excel, печатай PDF с подписями</div>
+      </div>
+      <div class="muted">Fargo — Manifest System</div>
+    </header>
+
+    <!-- TOP: Couriers + Scanner + Quick add -->
+    <div class="top" role="region" aria-label="Top controls">
+      <!-- Couriers (left) -->
+      <div class="box small" aria-labelledby="courLabel">
+        <div id="courLabel" class="muted">Выберите курьера</div>
+        <div class="courier-list" id="couriers" role="list">
+          <!-- JS заполнит список курьеров -->
+        </div>
+      </div>
+
+      <!-- Scanner -->
+      <div class="box" aria-labelledby="scanLabel">
+        <div id="scanLabel"><strong>Зона сканирования / мульти-скан</strong> <span class="muted">(каждый трек — новая строка)</span></div>
+        <label for="scanner" class="muted">Формат (если сканер выдаёт только ID, после добавления заполните ячейки вручную)</label>
+        <textarea id="scanner" aria-label="Scanner input" placeholder="Пример: TRK123456 | Иванов Иван | +998901234567 | Ташкент, Ахангаран 12 | 250000
+Или просто: TRK123457 (по одному треку на строку)"></textarea>
+
+        <div class="actions">
+          <button class="btn primary" id="btnAdd">Добавить сканы</button>
+          <button class="btn ghost" id="btnPaste" title="Вставить из буфера">Вставить</button>
+          <button class="btn ghost" id="btnClear">Очистить поле</button>
+        </div>
+
+        <div class="muted" style="margin-top:10px">Совет: большинство USB-сканеров эмулируют клавиатуру — они автоматически вставят строку и нажмут Enter.</div>
+      </div>
+
+      <!-- Quick single add -->
+      <div class="box small" aria-labelledby="quickLabel">
+        <div id="quickLabel"><strong>Быстро добавить одно</strong></div>
+        <label for="qId">ID почты</label><input id="qId" type="text" />
+        <label for="qName">Получатель</label><input id="qName" type="text" />
+        <label for="qPhone">Телефон</label><input id="qPhone" type="tel" />
+        <label for="qAddr">Адрес</label><input id="qAddr" type="text" />
+        <label for="qSum">Сумма (сум)</label><input id="qSum" type="number" />
+        <div class="actions">
+          <button class="btn primary" id="btnQuickAdd">Добавить в таблицу</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap" role="region" aria-label="Manifest table">
+      <table id="manifestTable" aria-describedby="tableDesc">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID почты</th>
+            <th scope="col">Получатель</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">Адрес</th>
+            <th scope="col" class="right">Сумма (сум)</th>
+            <th scope="col">Действие</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5" class="right muted">Итого:</td>
+            <td class="right" id="totalSum">0</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div id="tableDesc" class="muted" style="padding:8px 0">Таблица редактируемая — кликните по ячейке (кроме колонки # и Действие), чтобы изменить данные.</div>
+    </div>
+
+    <!-- Footer area: totals + signatures + export -->
+    <div class="footer-area" role="region" aria-label="Footer controls">
+      <div class="totals" aria-live="polite">
+        <div class="muted">Общая сумма:</div>
+        <div style="font-size:20px;font-weight:800" id="bigTotal">0 сум</div>
+        <div style="margin-top:12px"><label class="muted">Дата манифеста</label>
+          <input id="manifestDate" type="text" value="" aria-label="manifest date" /></div>
+        <div style="margin-top:12px">
+          <label class="muted">Комментарий</label>
+          <input id="manifestNote" type="text" placeholder="Например: Смена утро 2025-08-31" />
+        </div>
+      </div>
+
+      <div class="signature-pad">
+        <div class="muted">Подпись курьера (он расписывается после получения)</div>
+        <canvas id="signCourier" width="600" height="120" aria-label="Подпись курьера"></canvas>
+        <div class="actions" style="margin-top:8px">
+          <button class="btn ghost" id="clearCourier">Очистить</button>
+        </div>
+      </div>
+
+      <div class="signature-pad">
+        <div class="muted">Подпись принимающего (ты, чтобы защитить себя)</div>
+        <canvas id="signReceiver" width="600" height="120" aria-label="Подпись принимающего"></canvas>
+        <div class="actions" style="margin-top:8px">
+          <button class="btn ghost" id="clearReceiver">Очистить</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:10px;margin-top:18px;align-items:center;flex-wrap:wrap">
+      <button class="btn primary" id="btnExport">📄 Скачать PDF манифеста</button>
+      <button class="btn ghost" id="btnPrint">🖨️ Печать</button>
+      <button class="btn ghost" id="btnExportCSV">⬇️ Экспорт CSV</button>
+      <button class="btn danger" id="btnClearTable">Очистить таблицу</button>
+    </div>
+  </div>
+
+<script>
+/* ----------------------
+   Данные курьеров (фиксированные)
+   ---------------------- */
+const COURIERS = [
+  "Ulug'bek Nuriyev",
+  "Ulug'bek Jurabayev",
+  "Otabek Saydullayev",
+  "Dilshod Tadjibayev",
+  "Muzaffar Aliyev",
+  "Nomonjon"
+];
+
+/* ---------- Helper ---------- */
+const qs = s => document.querySelector(s);
+const qsa = s => Array.from(document.querySelectorAll(s));
+const tbody = qs('#manifestTable tbody');
+const totalSumEl = qs('#totalSum');
+const bigTotalEl = qs('#bigTotal');
+const manifestDate = qs('#manifestDate');
+const manifestNote = qs('#manifestNote');
+
+/* ---------- Инициализация UI ---------- */
+function init() {
+  // Couriers
+  const clist = qs('#couriers');
+  COURIERS.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'courier';
+    el.setAttribute('role','listitem');
+    el.tabIndex = 0;
+    el.innerHTML = `<div style="flex:1"><strong>${c}</strong><div class="muted">Курьер #${i+1}</div></div>`;
+    el.addEventListener('click', ()=>selectCourier(el,c));
+    el.addEventListener('keydown', (e)=>{ if(e.key==='Enter') selectCourier(el,c) });
+    clist.appendChild(el);
+    // по умолчанию выделяем первого
+    if(i===0) selectCourier(el,c);
+  });
+
+  // date
+  manifestDate.value = new Date().toLocaleString();
+
+  // кнопки
+  qs('#btnAdd').addEventListener('click', handleAddScans);
+  qs('#btnPaste').addEventListener('click', handlePaste);
+  qs('#btnClear').addEventListener('click', ()=>qs('#scanner').value='');
+  qs('#btnQuickAdd').addEventListener('click', handleQuickAdd);
+  qs('#btnExport').addEventListener('click', exportPDF);
+  qs('#btnPrint').addEventListener('click', ()=>window.print());
+  qs('#btnExportCSV').addEventListener('click', exportCSV);
+  qs('#btnClearTable').addEventListener('click', clearTable);
+
+  // подписные pad
+  initSignature('signCourier', 'clearCourier');
+  initSignature('signReceiver', 'clearReceiver');
+
+  // делаем первую строку пустой подсказкой
+  //addRow({id:'TRK-example-001', name:'Иван Иванов', phone:'+998901234567', addr:'Ташкент, ул. X, 12', sum:250000});
+}
+init();
+
+/* ---------- Courier select ---------- */
+let selectedCourier = COURIERS[0];
+function selectCourier(el,name){
+  qsa('.courier').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  selectedCourier = name;
+}
+
+/* ---------- Add scans (парсинг textarea) ---------- */
+/*
+  Поддерживаем формат строк:
+  1) Полная строка: ID | Имя | Телефон | Адрес | Сумма
+  2) Только ID: в этом случае добавляется строка с пустыми полями (редактируем вручную)
+  Разделитель: '|' или таб или запятая; строки разделяются переводом строки.
+*/
+function handleAddScans(){
+  const raw = qs('#scanner').value.trim();
+  if(!raw) { alert('Поле сканера пустое'); return; }
+  const lines = raw.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+  lines.forEach(line=>{
+    // пробуем разбить по | или \t или ;
+    let parts = line.split('|').map(p=>p.trim());
+    if(parts.length===1){
+      // возможно через таб или запятую
+      if(line.includes('\t')) parts = line.split('\t').map(p=>p.trim());
+      else if(line.includes(';')) parts = line.split(';').map(p=>p.trim());
+      else if(line.split(',').length>=5) parts = line.split(',').map(p=>p.trim());
+    }
+    // нормализуем в объект
+    const obj = {
+      id: parts[0] || '',
+      name: parts[1] || '',
+      phone: parts[2] || '',
+      addr: parts[3] || '',
+      sum: parts[4] ? Number(parts[4].replace(/\s|,|р|сум/g,'')) : 0
+    };
+    addRow(obj);
+  });
+  qs('#scanner').value = '';
+  recalcTotals();
+}
+
+/* вставить из буфера (если нужно) */
+async function handlePaste(){
+  try{
+    const text = await navigator.clipboard.readText();
+    qs('#scanner').value = text;
+  }catch(e){ alert('Не удалось прочитать буфер обмена (попробуй вручную)') }
+}
+
+/* быстрый add */
+function handleQuickAdd(){
+  const id = qs('#qId').value.trim();
+  if(!id){ alert('Введите ID'); return; }
+  const obj = {
+    id,
+    name: qs('#qName').value.trim(),
+    phone: qs('#qPhone').value.trim(),
+    addr: qs('#qAddr').value.trim(),
+    sum: Number(qs('#qSum').value || 0)
+  };
+  addRow(obj);
+  // очистим
+  qs('#qId').value='';qs('#qName').value='';qs('#qPhone').value='';qs('#qAddr').value='';qs('#qSum').value='';
+  recalcTotals();
+}
+
+/* ---------- Работа с таблицей ---------- */
+let rowCount = 0;
+function addRow({id='', name='', phone='', addr='', sum=0}){
+  rowCount++;
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="muted">${rowCount}</td>
+    <td contenteditable="true" data-col="id" aria-label="ID">${escapeHtml(id)}</td>
+    <td contenteditable="true" data-col="name" aria-label="Получатель">${escapeHtml(name)}</td>
+    <td contenteditable="true" data-col="phone" aria-label="Телефон">${escapeHtml(phone)}</td>
+    <td contenteditable="true" data-col="addr" aria-label="Адрес">${escapeHtml(addr)}</td>
+    <td contenteditable="true" data-col="sum" aria-label="Сумма" class="right">${Number(sum)||0}</td>
+    <td class="muted">
+      <button class="btn ghost" data-action="del">Удалить</button>
+    </td>
+  `;
+  // слушаем события редактирования и кнопку удалить
+  tr.addEventListener('input', (e)=> {
+    // если редактируется сумма — нормализуем
+    const target = e.target;
+    if(target.dataset && target.dataset.col==='sum'){
+      target.innerText = sanitizeNumber(target.innerText);
+      recalcTotals();
+    }
+  });
+  tr.querySelector('[data-action="del"]').addEventListener('click', ()=>{ tr.remove(); rebuildIndices(); recalcTotals(); });
+  tbody.appendChild(tr);
+}
+
+/* sanitize цифр в сумме */
+function sanitizeNumber(text){
+  const num = Number(String(text).replace(/[^\d]/g,''));
+  return isNaN(num)?'0':String(num);
+}
+
+function escapeHtml(s=''){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+/* Переприсваиваем индексы при удалении */
+function rebuildIndices(){
+  rowCount = 0;
+  qsa('#manifestTable tbody tr').forEach(tr=>{
+    rowCount++;
+    tr.cells[0].innerText = rowCount;
+  });
+}
+
+/* Пересчёт сумм */
+function recalcTotals(){
+  let total = 0;
+  qsa('#manifestTable tbody tr').forEach(tr=>{
+    const val = Number(tr.querySelector('td[data-col="sum"]')?.innerText.replace(/[^\d]/g,'') || 0);
+    total += val;
+  });
+  totalSumEl.innerText = new Intl.NumberFormat().format(total);
+  bigTotalEl.innerText = new Intl.NumberFormat().format(total) + ' сум';
+}
+
+/* Очистить таблицу */
+function clearTable(){
+  if(!confirm('Вы уверены? Очистить всю таблицу.')) return;
+  tbody.innerHTML = ''; rowCount=0; recalcTotals();
+}
+
+/* Экспорт CSV */
+function exportCSV(){
+  const rows = [];
+  rows.push(['№','ID','Получатель','Телефон','Адрес','Сумма']);
+  qsa('#manifestTable tbody tr').forEach((tr,i)=>{
+    const r = [
+      i+1,
+      tr.querySelector('td[data-col="id"]').innerText,
+      tr.querySelector('td[data-col="name"]').innerText,
+      tr.querySelector('td[data-col="phone"]').innerText,
+      tr.querySelector('td[data-col="addr"]').innerText,
+      tr.querySelector('td[data-col="sum"]').innerText
+    ];
+    rows.push(r.map(cell=>`"${String(cell).replace(/"/g,'""')}"`).join(','));
+  });
+  const csv = rows.join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download='manifest.csv'; a.click(); URL.revokeObjectURL(url);
+}
+
+/* ---------- Signature pads ---------- */
+function initSignature(canvasId, btnClearId){
+  const canvas = qs('#'+canvasId);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.lineCap='round';
+  let drawing=false;
+  function pos(e){
+    const rect = canvas.getBoundingClientRect();
+    if(e.touches && e.touches[0]) return {x: e.touches[0].clientX-rect.left, y: e.touches[0].clientY-rect.top};
+    return {x: e.clientX-rect.left, y: e.clientY-rect.top};
+  }
+  canvas.addEventListener('mousedown', e=>{ drawing=true; const p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
+  canvas.addEventListener('mousemove', e=>{ if(!drawing) return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+  window.addEventListener('mouseup', ()=>drawing=false);
+  canvas.addEventListener('touchstart', e=>{ drawing=true; const p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); e.preventDefault(); });
+  canvas.addEventListener('touchmove', e=>{ if(!drawing) return; const p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); e.preventDefault(); });
+  window.addEventListener('touchend', ()=>drawing=false);
+
+  qs('#'+btnClearId).addEventListener('click', ()=>{ ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height); });
+}
+
+/* Получить dataURL подписи */
+function getSignatureDataURL(id){
+  const canvas = qs('#'+id);
+  // Если белый — считаем пустой
+  // возвращаем null если пустая
+  try{
+    const tmp = document.createElement('canvas'); tmp.width=canvas.width; tmp.height=canvas.height;
+    const tctx = tmp.getContext('2d'); tctx.drawImage(canvas,0,0);
+    const data = tctx.getImageData(0,0,tmp.width,tmp.height).data;
+    // проверим наличие тёмных пикселей
+    let has=false;
+    for(let i=0;i<data.length;i+=4){
+      if(data[i]<250 || data[i+1]<250 || data[i+2]<250){ has=true; break; }
+    }
+    if(!has) return null;
+    return tmp.toDataURL('image/png', 0.9);
+  }catch(e){ return null; }
+}
+
+/* ---------- Export to PDF (jsPDF + autoTable) ---------- */
+async function exportPDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({unit:'pt', format:'a4'});
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // header text (гарантия) — разбиваем по ширине
+  const headerText = "Biz kim quyidagi imzo chekuvchilar ushbu dalolatnomani tuzishimizdan maqsad shuki men manifestda qabul qilib olgan pochtalarimi o'z egalariga yetib borishi va ulardan olinadigan tulov summasini to'liq xolda qaytarib olib kelaman va pochtalarni butun xolda o'z egalariga yetib borishini kafolatlayman";
+  doc.setFontSize(10);
+  doc.setTextColor(20,20,30);
+  doc.text(headerText, 40, 40, {maxWidth: pageWidth-80});
+
+  // Title + meta
+  doc.setFontSize(14); doc.setFont(undefined,'bold');
+  doc.text(`Манифест — курьер: ${selectedCourier}`, 40, 100);
+  doc.setFontSize(10); doc.setFont(undefined,'normal');
+  doc.text(`Дата: ${manifestDate.value}`, 40, 118);
+  if(manifestNote.value) doc.text(`Примечание: ${manifestNote.value}`, 40, 132);
+
+  // Таблица: соберём данные
+  const body = [];
+  qsa('#manifestTable tbody tr').forEach((tr,i)=>{
+    const id = tr.querySelector('td[data-col="id"]').innerText;
+    const name = tr.querySelector('td[data-col="name"]').innerText;
+    const phone = tr.querySelector('td[data-col="phone"]').innerText;
+    const addr = tr.querySelector('td[data-col="addr"]').innerText;
+    const sum = tr.querySelector('td[data-col="sum"]').innerText;
+    body.push([String(i+1), id, name, phone, addr, sum]);
+  });
+
+  // Если пусто — предупредим
+  if(body.length===0){ alert('Таблица пуста — добавить хотя бы одну строку'); return; }
+
+  // AutoTable
+  doc.autoTable({
+    startY: 150,
+    head: [['#','ID почты','Получатель','Телефон','Адрес','Сумма']],
+    body,
+    styles: { fontSize: 9, overflow:'linebreak' },
+    headStyles: { fillColor: [124,58,237], textColor: 255, halign:'center' },
+    columnStyles: {
+      0: {cellWidth: 24},
+      5: {halign:'right', cellWidth: 70}
+    },
+    theme: 'grid',
+    margin: {left:40, right:40}
+  });
+
+  // totals
+  const finalY = doc.lastAutoTable.finalY + 10;
+  const total = totalSumEl.innerText;
+  doc.setFontSize(11); doc.text(`ИТОГО: ${total} сум`, pageWidth-140, finalY+10, {align:'right'});
+
+  // Подписи (вставим картинки если есть)
+  const signCourierData = getSignatureDataURL('signCourier');
+  const signReceiverData = getSignatureDataURL('signReceiver');
+  const signY = finalY + 50;
+
+  // Boxes for signatures
+  doc.setDrawColor(0); doc.setLineWidth(0.5);
+  doc.rect(60, signY, 220, 80); // courier box
+  doc.rect(pageWidth-280, signY, 220, 80); // receiver box
+
+  doc.setFontSize(10);
+  doc.text('Подпись курьера', 60, signY+95);
+  doc.text('Подпись принимающего', pageWidth-280, signY+95);
+
+  if(signCourierData){
+    // scale image to fit box
+    doc.addImage(signCourierData, 'PNG', 70, signY+8, 200, 60);
+  }
+  if(signReceiverData){
+    doc.addImage(signReceiverData, 'PNG', pageWidth-270, signY+8, 200, 60);
+  }
+
+  // Save PDF
+  doc.save(`manifest_${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.pdf`);
+}
+
+/* ---------- Печать (chrome-friendly) ---------- */
+qs('#btnPrint').addEventListener('click', ()=>{
+  // простая печать текущего окна (можно настроить)
+  window.print();
+});
+
+</script>
+</body>
+</html>
