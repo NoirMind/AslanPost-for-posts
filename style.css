@@ -1,0 +1,85 @@
+:root{
+  --bg: #071428;
+  --card: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  --muted: #94a3b8;
+  --text: #e6eef8;
+  --accent1: #7c3aed;
+  --accent2: #06b6d4;
+  --glass: rgba(255,255,255,0.03);
+  --radius: 12px;
+  --success: #22c55e;
+  --danger: #ef4444;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial;background:linear-gradient(180deg,#071029 0%, #081428 45%, #07182a 100%);color:var(--text);}
+
+.wrap{max-width:1200px;margin:28px auto;padding:20px;border-radius:16px;background:var(--card);box-shadow:0 6px 30px rgba(2,6,23,0.7);outline:1px solid rgba(255,255,255,0.02);}
+
+header{display:flex;justify-content:space-between;align-items:center;gap:16px}
+h1{font-size:20px;margin:0;font-weight:800}
+.subtitle{color:var(--muted);font-size:13px}
+.meta{color:var(--muted);font-size:13px}
+
+/* layout */
+.top{display:flex;gap:16px;margin-top:18px;flex-wrap:wrap}
+.box{background:var(--glass);padding:16px;border-radius:var(--radius);flex:1;min-width:260px}
+.box.small{flex:0 0 300px}
+label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+input[type="text"],input[type="tel"],input[type="number"],select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:var(--text);outline:none;font-size:14px}
+textarea{min-height:90px;resize:vertical;padding:12px}
+
+/* Couriers */
+.courier-list{display:flex;flex-direction:column;gap:8px}
+.courier{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));cursor:pointer;border:1px solid rgba(255,255,255,0.03);transition:transform .15s,box-shadow .15s}
+.courier:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(124,58,237,0.08)}
+.courier.active{box-shadow:0 10px 40px rgba(124,58,237,0.18);border:1px solid rgba(124,58,237,0.35)}
+.courier .dot{width:10px;height:10px;border-radius:50%;background:var(--accent2)}
+.courier strong{display:block;font-weight:700}
+
+/* actions & buttons */
+.actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:700;color:#071428}
+.btn.primary{background:linear-gradient(90deg,var(--accent1),#5b21b6);color:var(--text);box-shadow:0 8px 20px rgba(92,33,179,0.18)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text)}
+.btn.danger{background:var(--danger);color:white}
+
+/* grid quick inputs */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:8px}
+
+/* table */
+.table-wrap{margin-top:20px;overflow:auto;border-radius:12px}
+.table-scroll{background:transparent;border-radius:12px;overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:900px}
+th,td{padding:12px 10px;border-bottom:1px solid rgba(255,255,255,0.03);text-align:left;font-size:14px}
+thead th{position:sticky;top:0;background:linear-gradient(90deg,var(--accent1),#5b21b6);color:white;font-weight:700}
+tbody tr:hover{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+td[contenteditable="true"]{background:rgba(255,255,255,0.02);border-radius:6px}
+.right{text-align:right}
+.muted{color:var(--muted);font-size:13px}
+
+/* footer area */
+.footer-area{display:flex;gap:20px;align-items:flex-start;margin-top:18px;flex-wrap:wrap}
+.totals{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;min-width:220px}
+.signature-pad{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;flex:1}
+canvas{background:white;border-radius:8px;width:100%;height:120px;display:block}
+
+/* global actions */
+.global-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+
+/* print styles */
+@media print {
+  body *{visibility:hidden}
+  #printArea, #printArea *{visibility:visible}
+  #printArea{position:fixed;left:0;top:0;width:100%}
+  /* приличный размер шрифта для печати */
+  #printArea h2{font-size:14px}
+  #printArea table{width:100%;border-collapse:collapse;margin-top:8px}
+  #printArea th, #printArea td{border:1px solid #000;padding:6px}
+}
+
+/* responsive */
+@media (max-width:880px){
+  .top{flex-direction:column}
+  table{min-width:700px}
+}
