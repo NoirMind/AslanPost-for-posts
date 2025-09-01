@@ -1,172 +1,39 @@
-<!doctype html>
-<html lang="ru">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>📦 AslanPost — Manifest System</title>
-
-    <!-- jsPDF + AutoTable (опционально, для скачивания PDF) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"
-        defer></script>
-
-    <!-- Стили -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./loginpage.css">
+  <title>Login Page</title>
 </head>
-
 <body>
-    <div class="wrap" role="main" aria-labelledby="title">
-        <header>
-            <div>
-                <h1 id="title">📦 AslanPost — Почтовый манифест</h1>
-                <p class="subtitle">Сканируйте ID, назначайте курьеру, печатайте манифест (для бумаги с подписью)</p>
-            </div>
-            <div class="meta">NoirMind Inc</div>
-        </header>
+  <main>
+    <section class="container login__page__section">
+      <img src="./img/Group 28.png" alt="glstr" class="logo" loading="lazy">
+      <div class="two__phases">
 
-
-        
-        <main class="top" aria-label="Контролы">
-            <!-- Couriers -->
-            <aside class="box small" aria-labelledby="couriersLabel">
-                <div id="couriersLabel" class="muted">Выберите курьера (или клавишей Enter)</div>
-                <div id="couriers" class="courier-list" role="list" aria-live="polite"></div>
-
-                <div class="muted" style="margin-top:12px;font-size:13px;">
-                    Выбран: <strong id="selectedCourierText">—</strong>
-                </div>
-            </aside>
-
-            <!-- Scanner & Quick add -->
-            <section class="box" aria-labelledby="scannerLabel">
-                <div id="scannerLabel"><strong>Зона сканирования / мульти-скан</strong>
-                    <span class="muted">(каждый трек — новая строка, поддерживается формат:
-                        <code>ID | ФИО | Телефон | Адрес | Сумма</code>)</span>
-                </div>
-
-                <textarea id="scanner" aria-label="Поле сканирования"
-                    placeholder="Поставьте курсор и сканируйте штрих-код/треки — каждая строка новая"></textarea>
-
-                <div class="actions">
-                    <button class="btn primary" id="btnAdd" aria-label="Добавить строки">Добавить в таблицу</button>
-                    <button class="btn ghost" id="btnPaste" aria-label="Вставить из буфера">Вставить</button>
-                    <button class="btn ghost" id="btnClear" aria-label="Очистить поле">Очистить</button>
-                </div>
-
-                <hr style="margin:12px 0;opacity:.06">
-
-                <div aria-labelledby="quickLabel">
-                    <div id="quickLabel" class="muted">Быстрая запись (одна посылка)</div>
-                    <div class="grid">
-                        <input id="qId" type="text" placeholder="ID почты" aria-label="ID почты" />
-                        <input id="qName" type="text" placeholder="Получатель" aria-label="Получатель" />
-                        <input id="qPhone" type="tel" placeholder="Телефон" aria-label="Телефон" />
-                        <input id="qAddr" type="text" placeholder="Адрес" aria-label="Адрес" />
-                        <input id="qSum" type="number" placeholder="Сумма (сум)" aria-label="Сумма" />
-                    </div>
-                    <div class="actions" style="margin-top:10px;">
-                        <button class="btn primary" id="btnQuickAdd" aria-label="Добавить одну">Добавить одно</button>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Таблица -->
-        <section class="table-wrap" aria-labelledby="tableLabel">
-            <h2 id="tableLabel" class="muted">Таблица манифеста</h2>
-            <div class="table-scroll">
-                <table id="manifestTable" aria-describedby="tableDesc">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>ID Почты</th>
-                            <th>Получатель</th>
-                            <th>Телефон</th>
-                            <th>Адрес</th>
-                            <th class="right">Сумма</th>
-                            <th>Курьер</th>
-                            <th>Действие</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="5" class="right muted">Итого:</td>
-                            <td class="right" id="totalSum">0</td>
-                            <td colspan="2"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div id="tableDesc" class="muted">Вы можете кликнуть в ячейку для редактирования (как Excel).</div>
-        </section>
-
-        <!-- Footer controls -->
-        <section class="footer-area" aria-label="Экспорт и подписи">
-            <div class="totals">
-                <div class="muted">Общая сумма:</div>
-                <div id="bigTotal" style="font-size:18px;font-weight:800">0 сум</div>
-                <label class="muted" style="display:block;margin-top:10px">Дата манифеста</label>
-                <input id="manifestDate" type="text" />
-                <label class="muted" style="display:block;margin-top:10px">Комментарий</label>
-                <input id="manifestNote" type="text" placeholder="Пример: Утреняя смена 2025-09-01" />
-            </div>
-
-            <div class="signature-pad">
-                <div class="muted">Подпись курьера (вставьте на бланке после печати)</div>
-                <canvas id="signCourier" width="600" height="120" aria-label="Подпись курьера"></canvas>
-                <div class="actions" style="margin-top:8px">
-                    <button class="btn ghost" id="clearCourier">Очистить</button>
-                </div>
-            </div>
-
-            <div class="signature-pad">
-                <div class="muted">Подпись принимающего</div>
-                <canvas id="signReceiver" width="600" height="120" aria-label="Подпись принимающего"></canvas>
-                <div class="actions" style="margin-top:8px">
-                    <button class="btn ghost" id="clearReceiver">Очистить</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Actions global -->
-        <div class="actions global-actions" style="margin-top:18px;">
-            <button class="btn primary" id="btnExport">📄 Скачать PDF манифеста (для выбранного курьера)</button>
-            <button class="btn ghost" id="btnPrint">🖨️ Печать манифеста (для выбранного курьера)</button>
-            <button class="btn ghost" id="btnExportCSV">⬇️ Экспорт CSV</button>
-            <button class="btn danger" id="btnClearTable">Очистить таблицу</button>
+        <!-- Робот -->
+        <div class="gladiator">
+          <script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.53/build/spline-viewer.js"></script>
+          <spline-viewer class="robot-bg" url="https://prod.spline.design/ksjtpLjv15nWToJ2/scene.splinecode"></spline-viewer>
         </div>
-    </div>
 
-    <!-- Print-only area -->
-    <div id="printArea" aria-hidden="true">
-        <div class="print-header">
-            <h2>Biz kim quyidagi imzo chekuvchilar ushbu dalolatnomani tuzishimizdan maqsad shuki men manifestda qabul
-                qilib olgan pochtalarimi o'z egalariga yetib borishi va ulardan olinadigan tulov summasini to'liq xolda
-                qaytarib olib kelaman va pochtalarni butun xolda o'z egalariga yetib borishini kafolatlayman</h2>
-            <p id="printMeta"></p>
+        <!-- Форма логина -->
+        <div class="login_box content-front">
+          <div class="loginpage__textbox">
+            <h1 class="login_box_h1">Everything fast with Aslan Post </h1>
+            <p class="login_box_b">Gladiator’s Strength, Lightning Speed</p>
+          </div>
+
+          <input type="text" id="username" placeholder="Login" class="login_box_input content-front">
+          <input type="password" id="password" placeholder="Password" class="login_box_input content-front">
+          <button type="button" id="loginBtn" class="login_button content-front">Login</button>
+          <p id="error" style="color:red; display:none;">Неверный логин или пароль!</p>
         </div>
-        <table id="printTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>ID Почты</th>
-                    <th>Получатель</th>
-                    <th>Телефон</th>
-                    <th>Адрес</th>
-                    <th>Сумма</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="print-sign">
-            <p>Курьер: <span id="printCourierName"></span></p>
-            <p>Подпись курьера: ____________________________</p>
-        </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="script.js" defer></script>
+      </div>
+    </section>
+  </main>
+
+  <script src="./login-page.js"></script>
 </body>
-
 </html>

@@ -13,6 +13,25 @@
     box-sizing: border-box;
 }
 
+.robot-bg {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; 
+}
+
+
+.content-front {
+    position: relative;
+    z-index: 2;
+}
+
+.robot-bg::part(branding) {
+    display: none !important;
+}
+
 body{
     font-family: 'Marcellus SC';
     background: #242124;
@@ -22,8 +41,108 @@ body{
     line-height: 1.5;
 }
 
+
 .container{
     max-width: 1240px;
     margin: 0 auto;
     padding: 0px 20px;
+}
+
+.two__phases{
+    margin-top: 176px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.login_box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.login_box_input{
+    width: 300px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    padding: 10px 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #333232;
+    font-family: 'Marcellus SC';
+    font-size: 16px;
+}
+
+.login_button {
+    margin-top: 20px;
+    width: 150px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: none;
+    border: 1px solid #333232;
+    color: white;
+    cursor: pointer; /* меняем курсор при наведении */
+    transition: all 0.2s ease; /* плавный эффект */
+}
+
+.login_button:hover {
+    background-color: #555; /* при наведении фон */
+}
+
+.login_button:active {
+    transform: scale(0.95); /* при нажатии лёгкое уменьшение */
+    background-color: #9b9a9a; /* цвет при нажатии */
+}
+
+.login_box_h1{
+    display: flex;
+    justify-content: start;
+    font-weight: 400;
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.login_box_b{
+    display: flex;
+    justify-content: end;
+    font-weight: 200;
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.logo{
+    position: relative;
+    margin-top: 20px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+/* Центрированный бокс с blur */
+.login_box {
+    position: absolute; /* чтобы центрировать по экрану */
+    top: 50%;
+    left: 50%;
+    transform: translate(80%, -50%); /* идеально по центру */
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    width: 360px;
+    padding: 40px;
+    
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1); /* прозрачность */
+    backdrop-filter: blur(5px); /* размытие фона */
+    
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3); /* лёгкая тень */
+    z-index: 2; /* поверх 3D фона */
 }
