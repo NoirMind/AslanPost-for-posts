@@ -146,3 +146,19 @@ body{
     box-shadow: 0 8px 32px rgba(0,0,0,0.3); /* лёгкая тень */
     z-index: 2; /* поверх 3D фона */
 }
+
+@media (max-width: 600px) {
+  form {
+    width: 90%;
+    padding: 20px;
+  }
+
+  input {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
