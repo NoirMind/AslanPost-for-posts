@@ -104,8 +104,8 @@ body{
 .login_box_h1{
     display: flex;
     justify-content: start;
-    font-weight: 400;
-    font-size: 20px;
+    font-weight: 500;
+    font-size: 16px;
     color: #ffffff;
 }
 
