@@ -13,7 +13,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (username === correctUsername && password === correctPassword) {
         // Перенаправляем на домашнюю страницу
-        window.location.href = "home.html"; 
+        window.location.href = "./home.html"; 
       } else {
         error.style.display = "block";
       }
