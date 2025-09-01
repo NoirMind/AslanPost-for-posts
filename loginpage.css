@@ -35,7 +35,7 @@
 body{
     font-family: 'Marcellus SC';
     background: #242124;
-    background: linear-gradient(227deg,rgba(36, 33, 36, 1) 28%, rgba(66, 66, 66, 1) 89%);
+    background: linear-gradient(227deg,rgb(16, 16, 16) 28%, rgb(14, 14, 14) 89%);
     color: #e7e7e7;
     min-height: 100vh;
     line-height: 1.5;
