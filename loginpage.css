@@ -1,0 +1,29 @@
+/* marcellus-sc-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: 'Marcellus SC';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/marcellus-sc-v13-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Marcellus SC';
+    background: #242124;
+    background: linear-gradient(227deg,rgba(36, 33, 36, 1) 28%, rgba(66, 66, 66, 1) 89%);
+    color: #e7e7e7;
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+.container{
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0px 20px;
+}
