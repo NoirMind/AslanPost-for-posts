@@ -1,4 +1,4 @@
- window.addEventListener("DOMContentLoaded", () => {
+      window.addEventListener("DOMContentLoaded", () => {
       const button = document.getElementById("loginBtn");
 
       button.addEventListener("click", function(e) {
