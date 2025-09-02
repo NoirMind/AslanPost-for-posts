@@ -96,7 +96,7 @@ body{
     border-radius: 15px;
     background: none;
     border: 1px solid #333232;
-    color: white;
+    color: #bcbbbb;
     cursor: pointer; /* меняем курсор при наведении */
     transition: all 0.2s ease; /* плавный эффект */
 }
