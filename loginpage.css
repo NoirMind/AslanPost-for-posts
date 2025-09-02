@@ -82,6 +82,10 @@ body{
     color: #ffffff;
 }
 
+.login_box_input content-front{
+    color: #ffffff;
+}
+
 .login_button {
     margin-top: 20px;
     width: 150px;
