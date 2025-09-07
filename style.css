@@ -334,13 +334,105 @@ canvas {
   }
 }
 
-/* responsive */
-@media (max-width:880px) {
-  .top {
-    flex-direction: column
+@media (min-width: 1200px) {
+  body {
+    font-size: 16px;
   }
 
-  table {
-    min-width: 700px
+  .wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 40px;
+  }
+
+  header h1 {
+    font-size: 2.4rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
+
+  .table-scroll {
+    max-height: 700px;
+    overflow-y: auto;
+  }
+}
+
+/* 💻 Tablet (768px – 1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  body {
+    font-size: 15px;
+  }
+
+  .wrap {
+    padding: 15px 25px;
+  }
+
+  header h1 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .table-scroll {
+    max-height: 500px;
+    overflow-x: auto;
+  }
+}
+
+/* 📱 Mobile (≤ 767px) */
+@media (max-width: 767px) {
+  body {
+    font-size: 14px;
+  }
+
+  .wrap {
+    padding: 10px 15px;
+  }
+
+  header {
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  table th, table td {
+    font-size: 0.85rem;
+    padding: 6px;
+    white-space: nowrap;
+  }
+
+  .table-scroll {
+    overflow-x: auto;
+  }
+
+  /* кнопки растягиваем */
+  .btn {
+    width: 100%;
+    text-align: center;
   }
 }
