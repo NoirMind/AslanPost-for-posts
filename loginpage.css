@@ -157,17 +157,125 @@ body{
 }
 
 @media (max-width: 600px) {
-  form {
+  .two__phases {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+  }
+
+  .login_box {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
     width: 90%;
+    max-width: 320px;
     padding: 20px;
   }
 
-  input {
+  .login_box_input {
     width: 100%;
-    margin-bottom: 15px;
+    font-size: 14px;
   }
 
-  button {
+  .login_button {
     width: 100%;
+    height: 45px;
+    font-size: 14px;
+  }
+
+  .login_box_h1 {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .login_box_b {
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .logo {
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+/* 📟 Планшеты (601px – 1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .two__phases {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 120px;
+  }
+
+  .login_box {
+    transform: translate(-50%, -50%);
+    width: 70%;
+    max-width: 400px;
+    padding: 30px;
+  }
+
+  .login_box_input {
+    width: 100%;
+    font-size: 15px;
+  }
+
+  .login_button {
+    width: 70%;
+    height: 45px;
+  }
+
+  .login_box_h1 {
+    font-size: 16px;
+  }
+
+  .login_box_b {
+    font-size: 12px;
+  }
+}
+
+/* 🖥️ Десктоп (1025px – 1439px) */
+@media (min-width: 1025px) and (max-width: 1439px) {
+  .two__phases {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .login_box {
+    transform: translate(60%, -50%);
+    width: 380px;
+    padding: 35px;
+  }
+
+  .login_box_input {
+    width: 320px;
+  }
+}
+
+/* 🖥️💎 Большие мониторы (1440px и выше) */
+@media (min-width: 1440px) {
+  .login_box {
+    transform: translate(80%, -50%);
+    width: 420px;
+    padding: 45px;
+  }
+
+  .login_box_h1 {
+    font-size: 20px;
+  }
+
+  .login_box_b {
+    font-size: 12px;
+  }
+
+  .login_box_input {
+    font-size: 16px;
+    width: 350px;
+  }
+
+  .login_button {
+    width: 200px;
+    height: 50px;
+    font-size: 16px;
   }
 }
