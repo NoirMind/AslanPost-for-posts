@@ -257,7 +257,8 @@ td[contenteditable="true"] {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
   padding: 12px;
   border-radius: 12px;
-  min-width: 220px
+  min-width: 220px;
+  gap: 20px;
 }
 
 .signature-pad {
