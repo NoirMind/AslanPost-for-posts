@@ -256,7 +256,7 @@ body{
 @media (min-width: 1440px) {
   .login_box {
     transform: translate(80%, -50%);
-    width: 420px;
+    width: 380px;
     padding: 45px;
   }
 
