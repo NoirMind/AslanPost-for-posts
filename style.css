@@ -184,7 +184,7 @@ textarea {
 }
 
 .btn.ghost {
-  background: transparent;
+  background: linear-gradient(90deg, var(--accent1), #5b21b6);;
   border: 1px solid rgba(255, 255, 255, 0.06);
   color: var(--text)
 }
