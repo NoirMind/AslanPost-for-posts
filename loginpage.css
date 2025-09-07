@@ -32,6 +32,14 @@
     display: none !important;
 }
 
+spline-viewer::part(branding) {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 body{
     font-family: 'Marcellus SC';
     background: #242124;
