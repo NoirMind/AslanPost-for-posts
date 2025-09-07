@@ -125,7 +125,6 @@ function handleQuickAdd() {
         name: qs('#qName').value.trim(),
         phone: qs('#qPhone').value.trim(),
         addr: qs('#qAddr').value.trim(),
-        zam: qs('#qZam').value.trim(),
         sum: Number(qs('#qSum').value || 0),
         courier: selectedCourier
     };
@@ -146,7 +145,6 @@ function addRow({ id = '', name = '', phone = '', addr = '', zam = '', sum = 0, 
     <td contenteditable="true" data-col="name" aria-label="Получатель">${escapeHtml(name)}</td>
     <td contenteditable="true" data-col="phone" aria-label="Телефон">${escapeHtml(phone)}</td>
     <td contenteditable="true" data-col="addr" aria-label="Адрес">${escapeHtml(addr)}</td>
-    <td contenteditable="true" data-col="zam" aria-label="Заметка">${escapeHtml(zam)}</td>
     <td contenteditable="true" data-col="sum" aria-label="Сумма" class="right">${Number(sum) || 0}</td>
     <td class="muted" data-col="courier">${escapeHtml(courier)}</td>
     <td class="muted"><button class="btn ghost small" data-action="del">Удалить</button></td>
