@@ -11,6 +11,20 @@
   --danger: #ef4444;
 }
 
+#printArea {
+  display: none; /* скрываем на экране */
+}
+
+@media print {
+  #printArea {
+    display: block !important; /* показываем только при печати */
+  }
+
+  body *:not(#printArea):not(#printArea *) {
+    display: none !important; /* скрыть всё остальное при печати */
+  }
+}
+
 * {
   box-sizing: border-box
 }
