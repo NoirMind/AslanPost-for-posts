@@ -4,14 +4,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>📦 AslanPost — Manifest System</title>
+    <title>🦁 AslanPost — Parcell System</title>
 
     <!-- jsPDF + AutoTable (опционально, для скачивания PDF) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"
         defer></script>
 
-    <!-- Стили -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,7 +22,7 @@
                 <h1 id="title">📦 AslanPost — Почтовый манифест</h1>
                 <p class="subtitle">Сканируйте ID, назначайте курьеру, печатайте манифест (для бумаги с подписью)</p>
             </div>
-            <div class="meta">NoirMind Inc</div>
+            <div class="meta"> <i class="fa-solid fa-cat"></i> NoirMind Inc</div>
         </header>
 
 
@@ -146,13 +146,13 @@
             </thead>
             <tbody></tbody>
         </table>
-        <!-- <div class="print-sign">
+        <div class="print-sign">
             <p>Қабул қилдим:<br>
             Юқоридаги жадвалда кўрсатилган жўнатмаларни қабул қилдим,
             <br>топширувчига эътирозим йўқ.</p>
             <p>Курьер: <span id="printCourierName"></span></p>
             <p>Подпись курьера: ____________________________</p>
-        </div> -->
+        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="script.js" defer></script>
