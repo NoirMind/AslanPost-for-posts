@@ -112,22 +112,6 @@
                 <label class="muted" style="display:block;margin-top:10px">Комментарий</label>
                 <input id="manifestNote" type="text" placeholder="Пример: Утреняя смена 2025-09-01" />
             </div>
-
-            <div class="signature-pad">
-                <div class="muted">Подпись курьера (вставьте на бланке после печати)</div>
-                <canvas id="signCourier" width="600" height="120" aria-label="Подпись курьера"></canvas>
-                <div class="actions" style="margin-top:8px">
-                    <button class="btn ghost" id="clearCourier">Очистить</button>
-                </div>
-            </div>
-
-            <div class="signature-pad">
-                <div class="muted">Подпись принимающего</div>
-                <canvas id="signReceiver" width="600" height="120" aria-label="Подпись принимающего"></canvas>
-                <div class="actions" style="margin-top:8px">
-                    <button class="btn ghost" id="clearReceiver">Очистить</button>
-                </div>
-            </div>
         </section>
 
         <!-- Actions global -->
@@ -135,7 +119,6 @@
             <button class="btn primary" id="btnExport">📄 Скачать PDF манифеста (для выбранного курьера)</button>
             <button class="btn ghost" id="btnPrint">🖨️ Печать манифеста (для выбранного курьера)</button>
             <button class="btn ghost" id="btnExportCSV">⬇️ Экспорт CSV</button>
-            <button class="btn danger" id="btnClearTable">Очистить таблицу</button>
         </div>
     </div>
 
